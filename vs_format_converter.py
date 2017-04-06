@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 __author__ = "Anand M"
 
 '''
@@ -42,7 +44,7 @@ def printVcfHeader():
           "##FORMAT=<ID=AD,Number=1,Type=Integer,Description=\"Depth of variant-supporting bases (reads2)\">\n"
           "##FORMAT=<ID=FREQ,Number=1,Type=String,Description=\"Variant allele frequency\">\n"
           "##FORMAT=<ID=DP4,Number=1,Type=String,Description=\"Strand read counts: ref/fwd, ref/rev, var/fwd, var/rev\">\n"
-          "#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  NORMAL  TUMOR")
+          "#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	NORMAL	TUMOR")
 
 
 # Function to convert vcf record to NativeFormat record
@@ -118,6 +120,13 @@ def makeVcfRecord(nativeIp):
     id = '.'
     ref = nIp[2]
     alt = nIp[3]
+    
+    if alt[0] == "+":
+        alt = ref + alt[1:]
+    elif alt[0] == "-":
+        ref = ref + alt[1:]
+        alt = ref[0]
+
     qual = '.'
     filter = 'PASS'
     dp = int(nIp[4]) + int(nIp[5]) + int(nIp[8]) + int(nIp[9])
