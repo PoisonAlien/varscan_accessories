@@ -120,7 +120,6 @@ def makeVcfRecord(nativeIp):
     id = '.'
     ref = nIp[2]
     alt = nIp[3]
-    
     if alt[0] == "+":
         alt = ref + alt[1:]
     elif alt[0] == "-":
@@ -131,7 +130,13 @@ def makeVcfRecord(nativeIp):
     filter = 'PASS'
     dp = int(nIp[4]) + int(nIp[5]) + int(nIp[8]) + int(nIp[9])
     ss = somaticDict[nIp[12]]
-    ssc = -10 * math.log10(float(nIp[14]))
+
+    # Any somatic p-value == 0 gets a SSC of 225
+    if float(nIp[14]) == 0:
+        ssc = 255
+    else:
+        ssc = -10 * math.log10(float(nIp[14]))
+
     gpv = nIp[13]
     spv = nIp[14]
     if ss == '2':
